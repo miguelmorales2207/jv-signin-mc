@@ -20,4 +20,8 @@ public class Authenticate extends RequestUserBody {
     @JsonProperty("password")
     private String password;
 
+    @NotNull
+    @JsonProperty("vendor")
+    private Integer vendor;
+
 }

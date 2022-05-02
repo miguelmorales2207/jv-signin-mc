@@ -1,6 +1,7 @@
 package co.com.dk.juanvaldez.jvsigninmc.services;
 
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_AUTHENTICATE;
+import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_IS_VALIDATED;
 
 import co.com.dk.juanvaldez.jvsigninmc.data.domain.Authenticate;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCRestException;
@@ -79,7 +80,7 @@ public class SignInService {
 
     private boolean userIsValidate(String sessionId) throws SignUpMCRestException {
         String parameters = "?session=" + sessionId;
-        String uri = spoonityUrl + SPOONITY_USER_AUTHENTICATE + parameters;
+        String uri = spoonityUrl + SPOONITY_USER_IS_VALIDATED + parameters;
 
         logger.log(String.format("Requesting external service to VALIDATE USER EMAIL:{}", uri));
         UserIsValidated apiResponse = webClientRequester
