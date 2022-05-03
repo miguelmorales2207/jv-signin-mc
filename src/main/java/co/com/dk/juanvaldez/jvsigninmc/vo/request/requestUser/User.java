@@ -1,5 +1,6 @@
-package co.com.dk.juanvaldez.jvsigninmc.data.domain.requestUser;
+package co.com.dk.juanvaldez.jvsigninmc.vo.request.requestUser;
 
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.requestUser.Company;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;

@@ -1,6 +1,6 @@
-package co.com.dk.juanvaldez.jvsigninmc.data.domain;
+package co.com.dk.juanvaldez.jvsigninmc.vo.request;
 
-import co.com.dk.juanvaldez.jvsigninmc.data.domain.requestUser.RequestUserBody;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.requestUser.RequestUserBody;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package co.com.dk.juanvaldez.jvsigninmc.http;
 
-import co.com.dk.juanvaldez.jvsigninmc.data.domain.requestUser.RequestUserBody;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.requestUser.RequestUserBody;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.handlers.WebClientErrorHandler;
 import org.modelmapper.ModelMapper;

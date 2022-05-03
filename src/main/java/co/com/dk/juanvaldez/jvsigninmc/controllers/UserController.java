@@ -2,7 +2,9 @@ package co.com.dk.juanvaldez.jvsigninmc.controllers;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import co.com.dk.juanvaldez.jvsigninmc.data.domain.AuthenticateUser;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.AuthenticateUser;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.ResetPasswordApply;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.ResetPasswordRequest;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import co.com.dk.juanvaldez.jvsigninmc.services.ForgotPasswordService;
 import co.com.dk.juanvaldez.jvsigninmc.services.SignInService;
@@ -36,7 +38,8 @@ public class UserController {
         @Valid @RequestBody AuthenticateUser userAuthenticatedAuthenticateUser) {
 
         logger.log("Start USER sign in process.");
-        UserAuthenticated userAuthenticated = signInService.signIn(userAuthenticatedAuthenticateUser);
+        UserAuthenticated userAuthenticated = signInService
+            .signIn(userAuthenticatedAuthenticateUser);
         logger.log("USER signed in successfully.");
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -62,20 +65,34 @@ public class UserController {
                 .build());
     }
 
-    /*@GetMapping(value = "/activate", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseVO<Object>> activate(
-        @RequestParam(value = "token", required = true) String token,
-        @RequestParam(value = "session_identifier", required = true) String sessionId) {
+    @PostMapping(value = "/password-reset/reset", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseVO<Object>> resetPassword(
+        @Valid @RequestBody ResetPasswordRequest retrievePassword) {
 
-        logger.log("Start USER activation process.");
-        Object userValidated = forgotPasswordService.activate(token, sessionId);
-        logger.log("USER activated successfully.");
+        logger.log("Start USER sign out process.");
+        forgotPasswordService.resetPasswordRequest(retrievePassword);
+        logger.log("USER sign out successfully.");
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponseVO.<Object>builder()
-                .code(HttpStatus.OK.value())
-                .message("User has been activated successfully.")
+                .code(HttpStatus.CREATED.value())
+                .message("User has successfully logged out.")
                 .build());
-    }*/
+    }
+
+    @PostMapping(value = "/password-reset/apply", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseVO<Object>> resetPasswordApply(
+        @Valid @RequestBody ResetPasswordApply resetPassword) {
+
+        logger.log("Start USER sign out process.");
+        Object passwordReseted = forgotPasswordService.resetPasswordApply(resetPassword);
+        logger.log("USER sign out successfully.");
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(ApiResponseVO.<Object>builder()
+                .code(HttpStatus.CREATED.value())
+                .message("User has successfully logged out.")
+                .build());
+    }
 
 }

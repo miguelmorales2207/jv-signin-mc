@@ -4,7 +4,7 @@ import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_IS_VALIDATED;
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_LOGOUT;
 
-import co.com.dk.juanvaldez.jvsigninmc.data.domain.AuthenticateUser;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.AuthenticateUser;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.http.WebClientRequester;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;

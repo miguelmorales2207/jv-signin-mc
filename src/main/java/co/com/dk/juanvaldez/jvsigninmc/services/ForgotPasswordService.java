@@ -1,5 +1,11 @@
 package co.com.dk.juanvaldez.jvsigninmc.services;
 
+import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_PASSWORD_RESET_APPLY;
+import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_PASSWORD_RESET_REQUEST;
+
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.ResetPasswordApply;
+import co.com.dk.juanvaldez.jvsigninmc.vo.request.ResetPasswordRequest;
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.http.WebClientRequester;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,71 +24,50 @@ public class ForgotPasswordService {
         this.webClientRequester = webClientRequester;
     }
 
-    /*public Object activateSMS(String sessionId, String phone, String country) {
-        logger.log("Send confirmation to USER by SMS.");
-        Object activationSMS = userActivationBySMS(sessionId, phone, country);
-        logger.log("Confirmation have been sent to USER by SMS.");
+    public void resetPasswordRequest(ResetPasswordRequest retrievePassword) {
 
-        return activationSMS;
+        logger.log("Sending token via email address for RESET PASSWORD...");
+        resetPasswordSpoonityApi(retrievePassword);
+        logger.log("Token for RESET PASSWORD has been sent.");
     }
 
-    /*public Object activate(String token, String sessionId) {
-        logger.log("Activate USER.");
-        Object userActivated = activateUser(token, sessionId);
-        logger.log("USER has been activated successfully.");
+    public Object resetPasswordApply(ResetPasswordApply retrievePassword) {
 
-        //USER is validate?
-        //logger.log("Validate USER confirmation.");
-        //ValidUser z = userIsValidate("");
-        //logger.log("USER confirmation successfully.");
+        logger.log("RESETTING PASSWORD...");
+        Object passwordChanged = resetPasswordApplySpoonityApi(retrievePassword);
+        logger.log("RESET PASSWORD has been performed.");
 
-        return userActivated;
-    }*/
+        return passwordChanged;
+    }
 
-    /*private Object userActivationBySMS(String sessionId, String phone, String country)
+    private Object resetPasswordSpoonityApi(ResetPasswordRequest resetPassword)
         throws SignInMCRestException {
-        String parameters = "?session_identifier=" + sessionId;
-        String optionalParameter = "&phone=" + phone + "&country=" + country;
-        if (phone != null && country != null) {
-            parameters = parameters.concat(optionalParameter);
-        }
-        String uri = spoonityUrl + SPOONITY_USER_ACTIVATE_BY_SMS + parameters;
+        String uri = spoonityUrl + SPOONITY_USER_PASSWORD_RESET_REQUEST;
 
-        logger.log(String.format("Requesting external service to SEND CONFIRMATION "
-            + "for USER ACTIVATION by SMS: {}", uri));
+        logger
+            .log(String.format("Requesting external service to SEND TOKEN RESET PASSWORD:{}", uri));
         Object apiResponse = webClientRequester
-            .executeGetRequest(uri)
-            .bodyToMono(Object.class).block();
-        logger.log("API Response of SEND CONFIRMATION for USER ACTIVATION by SMS "
-            + "received successfully.");
+            .executePostRequest(uri, resetPassword)
+            .bodyToMono(Object.class)
+            .block();
+        logger.log("API Response of SEND TOKEN RESET PASSWORD received successfully.");
 
         return apiResponse;
     }
 
-    private Object activateUser(String token, String sessionId) {
-        String parameters = "?token=" + token + "&session_identifier=" + sessionId;
-        String uri = spoonityUrl + SPOONITY_USER_ACTIVATE + parameters;
+    private Object resetPasswordApplySpoonityApi(ResetPasswordApply resetPassword)
+        throws SignInMCRestException {
+        String uri = spoonityUrl + SPOONITY_USER_PASSWORD_RESET_APPLY;
 
-        logger.log(String.format("Requesting external service to USER ACTIVATION: {}", uri));
+        logger
+            .log(String.format("Requesting external service to RESET PASSWORD:{}", uri));
         Object apiResponse = webClientRequester
-            .executeGetRequest(uri)
-            .bodyToMono(Object.class).block();
-        logger.log("API Response of USER ACTIVATION received successfully.");
+            .executePostRequest(uri, resetPassword)
+            .bodyToMono(Object.class)
+            .block();
+        logger.log("API Response of RESET PASSWORD received successfully.");
 
         return apiResponse;
     }
-
-    private ValidUser userIsValidate(String session) {
-        String parameters = "?session=" + session;
-        String uri = spoonityUrl + SPOONITY_IS_VALIDATED + parameters;
-
-        logger.log(String.format("Requesting external service to confirm USER VALIDATE: {}", uri));
-        ValidUser apiResponse = webClientRequester
-            .executeGetRequest(uri)
-            .bodyToMono(ValidUser.class).block();
-        logger.log("API Response of confirmation USER VALIDATE received successfully.");
-
-        return apiResponse;
-    }*/
 
 }
