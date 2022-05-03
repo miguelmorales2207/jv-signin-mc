@@ -4,12 +4,13 @@ import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_IS_VALIDATED;
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_LOGOUT;
 
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCException;
 import co.com.dk.juanvaldez.jvsigninmc.vo.request.AuthenticateUser;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.http.WebClientRequester;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
-import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse.UserAuthenticated;
-import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse.UserIsValidated;
+import co.com.dk.juanvaldez.jvsigninmc.vo.response.UserAuthenticated;
+import co.com.dk.juanvaldez.jvsigninmc.vo.response.UserIsValidated;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +42,11 @@ public class SignInService {
         return userAuthenticated;
     }
 
-    public Object signOut(String sessionId) {
+    public void signOut(String sessionKey) throws SignInMCException {
 
         logger.log("Sign out USER...");
-        Object userLoggedOut = signOutUserSpoonityApi(sessionId);
+        signOutUserSpoonityApi(sessionKey);
         logger.log("USER logged out.");
-
-        return userLoggedOut;
     }
 
     private UserAuthenticated authenticateUserSpoonityApi(AuthenticateUser userAccess)
@@ -64,14 +63,14 @@ public class SignInService {
         return apiResponse;
     }
 
-    private Object signOutUserSpoonityApi(String sessionId)
-        throws SignInMCRestException {
-        String parameters = "?session_key=" + sessionId;
+    private Object signOutUserSpoonityApi(String sessionKey)
+        throws SignInMCException {
+        String parameters = "?session_key=" + sessionKey;
         String uri = spoonityUrl + SPOONITY_USER_LOGOUT + parameters;
 
         logger.log(String.format("Requesting external service to SIGN OUT USER:{}", uri));
         Object apiResponse = webClientRequester
-            .executePostRequest(uri, null)
+            .executePostRequestWithoutBody(uri)
             .bodyToMono(Object.class)
             .block();
         logger.log("API Response of SIGN OUT USER received successfully.");

@@ -1,4 +1,4 @@
-package co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse;
+package co.com.dk.juanvaldez.jvsigninmc.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class UserVendor implements Serializable {
     private Date created;
 
     @JsonProperty("billing_profile")
-    private Integer billingProfile;
+    private Long billingProfile;
 
     @JsonProperty("tier")
     private Object tier;

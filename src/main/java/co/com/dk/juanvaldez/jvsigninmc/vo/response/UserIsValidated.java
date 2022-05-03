@@ -1,4 +1,4 @@
-package co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse;
+package co.com.dk.juanvaldez.jvsigninmc.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
@@ -16,6 +16,6 @@ public class UserIsValidated implements Serializable {
     private static final long serialVersionUID = -3228787783470270554L;
 
     @JsonProperty("isValidated")
-    private boolean isValidated;
+    private boolean isValidated = false;
 
 }

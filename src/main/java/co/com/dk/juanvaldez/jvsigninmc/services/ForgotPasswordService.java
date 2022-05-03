@@ -24,20 +24,18 @@ public class ForgotPasswordService {
         this.webClientRequester = webClientRequester;
     }
 
-    public void resetPasswordRequest(ResetPasswordRequest retrievePassword) {
+    public void resetPasswordRequest(ResetPasswordRequest resetPassword) {
 
         logger.log("Sending token via email address for RESET PASSWORD...");
-        resetPasswordSpoonityApi(retrievePassword);
+        resetPasswordSpoonityApi(resetPassword);
         logger.log("Token for RESET PASSWORD has been sent.");
     }
 
-    public Object resetPasswordApply(ResetPasswordApply retrievePassword) {
+    public void resetPasswordApply(ResetPasswordApply resetPassword) {
 
         logger.log("RESETTING PASSWORD...");
-        Object passwordChanged = resetPasswordApplySpoonityApi(retrievePassword);
+        resetPasswordApplySpoonityApi(resetPassword);
         logger.log("RESET PASSWORD has been performed.");
-
-        return passwordChanged;
     }
 
     private Object resetPasswordSpoonityApi(ResetPasswordRequest resetPassword)

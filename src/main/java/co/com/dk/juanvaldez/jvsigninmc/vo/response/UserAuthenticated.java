@@ -1,4 +1,4 @@
-package co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse;
+package co.com.dk.juanvaldez.jvsigninmc.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
@@ -27,8 +27,8 @@ public class UserAuthenticated implements Serializable {
     @JsonProperty("session_identifier")
     private String sessionIdentifier;
 
-    //@JsonProperty("user_vendor")
-    //private UserVendor userVendor;
+    @JsonProperty("user_vendor")
+    private UserVendor userVendor;
 
     @JsonProperty("is_validated")
     private boolean isValidated;

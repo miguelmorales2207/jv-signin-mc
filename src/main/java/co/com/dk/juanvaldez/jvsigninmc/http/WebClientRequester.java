@@ -1,5 +1,6 @@
 package co.com.dk.juanvaldez.jvsigninmc.http;
 
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.vo.request.requestUser.RequestUserBody;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.handlers.WebClientErrorHandler;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.reactive.function.UnsupportedMediaTypeException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import reactor.core.publisher.Mono;
@@ -63,7 +65,8 @@ public class WebClientRequester {
             .onStatus(HttpStatus::isError, WebClientErrorHandler::manageError);
     }
 
-    public ResponseSpec executePostRequest(String uri, RequestUserBody requestUser) {
+    public ResponseSpec executePostRequest(String uri, RequestUserBody requestUser)
+        throws SignInMCRestException {
         //requestUser.setUser(getAuthenticatedUser());
         //String token = getToken();
         return webClient.post()
@@ -72,6 +75,19 @@ public class WebClientRequester {
             .header(HttpHeaders.AUTHORIZATION, clientKey)
             .accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(requestUser), requestUser.getClass())
+            .retrieve()
+            .onStatus(HttpStatus::isError, WebClientErrorHandler::manageError);
+    }
+
+    public ResponseSpec executePostRequestWithoutBody(String uri)
+        throws SignInMCRestException {
+        //requestUser.setUser(getAuthenticatedUser());
+        //String token = getToken();
+        return webClient.post()
+            .uri(uri)
+            //.header(HttpHeaders.AUTHORIZATION, token)
+            .header(HttpHeaders.AUTHORIZATION, clientKey)
+            .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(HttpStatus::isError, WebClientErrorHandler::manageError);
     }
