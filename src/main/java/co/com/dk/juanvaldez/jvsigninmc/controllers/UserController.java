@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,24 +32,40 @@ public class UserController {
         this.forgotPasswordService = forgotPasswordService;
     }
 
-    /*@GetMapping(value = "/activate/sms", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseVO<Object>> activateSMS(
-        @RequestParam(value = "session_identifier", required = true) String sessionId,
-        @RequestParam(value = "phone", required = true) String phone,
-        @RequestParam(value = "country", required = true) String country) {
+    @PostMapping(value = "/authenticate", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseVO<Authenticated>> LogIn(
+        @Valid @RequestBody Authenticate authenticateUser)
+        throws BusinessRuleException {
 
-        logger.log("Start the process of sending the verification code for USER activation.");
-        Object activationSMS = forgotPasswordService.activateSMS(sessionId, phone, country);
-        logger.log("Successful sending of verification code for USER activation.");
+        logger.log("Start USER register process.");
+        Authenticated userAuthenticated = signInService.signIn(authenticateUser);
+        logger.log("USER registered successfully.");
 
-        return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseVO.<Object>builder()
-                .code(HttpStatus.OK.value())
-                .message("Verification code has been sent successfully.")
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponseVO.<Authenticated>builder()
+                .code(HttpStatus.CREATED.value())
+                .message("User has logged in successfully.")
+                .data(userAuthenticated)
                 .build());
     }
 
-    @GetMapping(value = "/activate", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/logout", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseVO<Object>> LogOut(
+        @RequestParam(value = "session_key", required = true) String sessionId)
+        throws BusinessRuleException {
+
+        logger.log("Start USER register process.");
+        Object userLoggedOut = signInService.signOut(sessionId);
+        logger.log("USER registered successfully.");
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(ApiResponseVO.<Object>builder()
+                .code(HttpStatus.CREATED.value())
+                .message("User has successfully logged out.")
+                .build());
+    }
+
+    /*@GetMapping(value = "/activate", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseVO<Object>> activate(
         @RequestParam(value = "token", required = true) String token,
         @RequestParam(value = "session_identifier", required = true) String sessionId) {
@@ -63,21 +80,5 @@ public class UserController {
                 .message("User has been activated successfully.")
                 .build());
     }*/
-
-    @PostMapping(value = "/authenticate", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseVO<Authenticated>> LogIn(
-        @Valid @RequestBody Authenticate authenticateUser)
-        throws BusinessRuleException {
-        logger.log("Start USER register process.");
-        Authenticated userAuthenticated = signInService.signIn(authenticateUser);
-        logger.log("USER registered successfully.");
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponseVO.<Authenticated>builder()
-                .code(HttpStatus.CREATED.value())
-                .message("User has logged in successfully.")
-                .data(userAuthenticated)
-                .build());
-    }
 
 }

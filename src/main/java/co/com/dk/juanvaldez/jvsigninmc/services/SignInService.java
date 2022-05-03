@@ -2,6 +2,7 @@ package co.com.dk.juanvaldez.jvsigninmc.services;
 
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_AUTHENTICATE;
 import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_IS_VALIDATED;
+import static co.com.dk.juanvaldez.jvsigninmc.constants.WebURIConstants.SPOONITY_USER_LOGOUT;
 
 import co.com.dk.juanvaldez.jvsigninmc.data.domain.Authenticate;
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCRestException;
@@ -32,11 +33,21 @@ public class SignInService {
         logger.log("New USER has been created.");
 
         logger.log("Validate if the USER email or cedula exists.");
-        boolean userIsValidated = userIsValidate(userAuthenticated.getSessionIdentifier());
+        boolean userIsValidated = userIsValidateSpoonityApi(
+            userAuthenticated.getSessionIdentifier());
         userAuthenticated.setValidated(userIsValidated);
         logger.log("Email and cedula does not exists, continuous the USER register process.");
 
         return userAuthenticated;
+    }
+
+    public Object signOut(String sessionId) {
+
+        logger.log("Validate if the USER email or cedula exists.");
+        Object userLoggedOut = signOutUserSpoonityApi(sessionId);
+        logger.log("Email and cedula does not exists, continuous the USER register process.");
+
+        return userLoggedOut;
     }
 
     private Authenticated authenticateUserSpoonityApi(Authenticate userAccess)
@@ -53,32 +64,22 @@ public class SignInService {
         return apiResponse;
     }
 
-    /*private void validateUserExists(User user) throws BusinessRuleException {
-        logger.log("Validate if the USER email exists.");
-        boolean userValidation = userEmailExistsSpoonityApi(user.getEmailAddress());
-        if (userValidation) {
-            throw new BusinessRuleException(
-                String.format("Usuario con Email %1$s ya existe.", user.getEmailAddress()));
-        }
+    private Object signOutUserSpoonityApi(String sessionId)
+        throws SignUpMCRestException {
+        String parameters = "?session_key=" + sessionId;
+        String uri = spoonityUrl + SPOONITY_USER_LOGOUT + parameters;
 
-        logger.log("Validate if the USER cedula exists.");
-        boolean cedulaExists = userCedulaExistsSpoonityApi(user.getCedula(), user.getVendor());
-        if (cedulaExists) {
-            throw new BusinessRuleException(
-                String.format("Usuario con Cedula %1$s ya existe.", user.getCedula()));
-        }
+        logger.log(String.format("Requesting external service to VALIDATE USER EMAIL:{}", uri));
+        Object apiResponse = webClientRequester
+            .executePostRequest(uri, null)
+            .bodyToMono(Object.class)
+            .block();
+        logger.log("API Response of VALIDATE USER EMAIL received successfully.");
 
-        logger.log("Validate if the USER mobile exists.");
-        boolean mobileExists = userMobileExistsSpoonityApi(user.getVendor(),
-            user.getPhoneNumber().getNumber());
-        if (mobileExists) {
-            throw new BusinessRuleException(
-                String.format("Usuario con Mobile %1$s ya existe.", user.getCedula()));
-        }
+        return apiResponse;
+    }
 
-    }*/
-
-    private boolean userIsValidate(String sessionId) throws SignUpMCRestException {
+    private boolean userIsValidateSpoonityApi(String sessionId) throws SignUpMCRestException {
         String parameters = "?session=" + sessionId;
         String uri = spoonityUrl + SPOONITY_USER_IS_VALIDATED + parameters;
 
@@ -91,35 +92,5 @@ public class SignInService {
 
         return apiResponse.isValidated();
     }
-
-    /*private boolean userCedulaExistsSpoonityApi(String cedula, Integer vendor)
-        throws SignUpMCRestException {
-        String parameters = "?cedula=" + cedula + "&vendor=" + vendor;
-        String uri = spoonityUrl + SPOONITY_USER_CEDULA_EXISTS + parameters;
-
-        logger.log(String.format("Requesting external service to VALIDATE USER CEDULA:{}", uri));
-        UserValidation apiResponse = webClientRequester
-            .executeGetRequest(uri)
-            .bodyToMono(UserValidation.class)
-            .block();
-        logger.log("API Response of VALIDATE USER CEDULA received successfully.");
-
-        return apiResponse.getExists();
-    }
-
-    private boolean userMobileExistsSpoonityApi(Integer vendor, Long phone)
-        throws SignUpMCRestException {
-        String parameters = "?vendor=" + vendor + "&mobile=" + phone;
-        String uri = spoonityUrl + SPOONITY_USER_MOBILE_EXISTS + parameters;
-
-        logger.log(String.format("Requesting external service to VALIDATE USER MOBILE:{}", uri));
-        UserValidation apiResponse = webClientRequester
-            .executeGetRequest(uri)
-            .bodyToMono(UserValidation.class)
-            .block();
-        logger.log("API Response of VALIDATE USER MOBILE received successfully.");
-
-        return apiResponse.getExists();
-    }*/
 
 }
