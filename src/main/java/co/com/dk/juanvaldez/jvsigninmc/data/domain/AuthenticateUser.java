@@ -1,28 +1,27 @@
 package co.com.dk.juanvaldez.jvsigninmc.data.domain;
 
+import co.com.dk.juanvaldez.jvsigninmc.data.domain.requestUser.RequestUserBody;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class PhoneNumber implements Serializable {
+public class AuthenticateUser extends RequestUserBody {
 
     private static final long serialVersionUID = -3228787783470270554L;
 
     @NotNull
-    @Min(2)
-    @JsonProperty("code")
-    private Integer code;
+    @JsonProperty("email_address")
+    private String emailAddress;
 
     @NotNull
-    @Min(9)
-    @JsonProperty("number")
-    private Long number;
+    @JsonProperty("password")
+    private String password;
+
+    @NotNull
+    @JsonProperty("vendor")
+    private Integer vendor;
 
 }

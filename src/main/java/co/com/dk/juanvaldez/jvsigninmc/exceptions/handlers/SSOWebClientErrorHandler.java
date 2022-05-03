@@ -1,7 +1,7 @@
 package co.com.dk.juanvaldez.jvsigninmc.exceptions.handlers;
 
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.SSOAuthException;
-import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCRestException;
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,12 @@ public final class SSOWebClientErrorHandler {
     private SSOWebClientErrorHandler() {
     }
 
-    public static Mono<SignUpMCRestException> manageError(ClientResponse clientResponse) {
+    public static Mono<SignInMCRestException> manageError(ClientResponse clientResponse) {
         return clientResponse.bodyToMono(Map.class)
             .flatMap(SSOWebClientErrorHandler::handleResponse);
     }
 
-    private static Mono<SignUpMCRestException> handleResponse(Map<String, Object> response) {
+    private static Mono<SignInMCRestException> handleResponse(Map<String, Object> response) {
         logger.log(String.format("Response received on Web Client Error Handler: {}", response));
 
         StringBuilder message = new StringBuilder();

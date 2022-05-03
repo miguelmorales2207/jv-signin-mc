@@ -83,11 +83,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
             logger.log("Token is valid.");
-            logger.log("Authenticate User");
+            logger.log("AuthenticateUser User");
             UsernamePasswordAuthenticationToken auth = authenticateUser(claims);
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(auth);
-            logger.log("Authenticated user successfully");
+            logger.log("UserAuthenticated user successfully");
 
         } catch (JwtException e) {
             //logger.log(e.getMessage(), e);

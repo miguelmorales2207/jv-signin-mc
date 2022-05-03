@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SSOAuthException extends SignUpMCRestException {
+public class SSOAuthException extends SignInMCRestException {
 
     private int httpStatusCode;
 

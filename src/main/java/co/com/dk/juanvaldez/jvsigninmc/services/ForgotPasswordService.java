@@ -40,7 +40,7 @@ public class ForgotPasswordService {
     }*/
 
     /*private Object userActivationBySMS(String sessionId, String phone, String country)
-        throws SignUpMCRestException {
+        throws SignInMCRestException {
         String parameters = "?session_identifier=" + sessionId;
         String optionalParameter = "&phone=" + phone + "&country=" + country;
         if (phone != null && country != null) {

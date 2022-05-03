@@ -1,8 +1,8 @@
 package co.com.dk.juanvaldez.jvsigninmc.exceptions.handlers;
 
 import co.com.dk.juanvaldez.jvsigninmc.exceptions.BusinessRuleException;
-import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCException;
-import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCRestException;
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCException;
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import com.fasterxml.jackson.core.JsonParseException;
 import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponseVO;
@@ -35,7 +35,7 @@ public class RestControllerExceptionHandler {
                 .build());
     }
 
-    @ExceptionHandler(value = SignUpMCException.class)
+    @ExceptionHandler(value = SignInMCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<ApiResponseVO<Object>> handleException(Exception ex) {
         logger.log(String.format(ex.getMessage(), ex));
@@ -59,15 +59,15 @@ public class RestControllerExceptionHandler {
                 .build());
     }
 
-    @ExceptionHandler(value = SignUpMCRestException.class)
+    @ExceptionHandler(value = SignInMCRestException.class)
     protected ResponseEntity<ApiResponseVO<Object>> handleOrchMenuRestException(
-        SignUpMCRestException signUpMCRestException) {
-        logger.log(String.format(signUpMCRestException.getMessage(), signUpMCRestException));
-        return ResponseEntity.status(signUpMCRestException.getHttpStatusCode())
+        SignInMCRestException signInMCRestException) {
+        logger.log(String.format(signInMCRestException.getMessage(), signInMCRestException));
+        return ResponseEntity.status(signInMCRestException.getHttpStatusCode())
             .body(ApiResponseVO.builder()
-                .code(signUpMCRestException.getHttpStatusCode())
-                .message(signUpMCRestException.getMessage())
-                .error(signUpMCRestException.getErrors())
+                .code(signInMCRestException.getHttpStatusCode())
+                .message(signInMCRestException.getMessage())
+                .error(signInMCRestException.getErrors())
                 .build());
     }
 

@@ -1,6 +1,6 @@
 package co.com.dk.juanvaldez.jvsigninmc.exceptions.handlers;
 
-import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignUpMCRestException;
+import co.com.dk.juanvaldez.jvsigninmc.exceptions.SignInMCRestException;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +16,11 @@ public class WebClientErrorHandler {
     private WebClientErrorHandler() {
     }
 
-    public static Mono<SignUpMCRestException> manageError(ClientResponse clientResponse) {
+    public static Mono<SignInMCRestException> manageError(ClientResponse clientResponse) {
         return clientResponse.bodyToMono(Map.class).flatMap(WebClientErrorHandler::handleResponse);
     }
 
-    private static Mono<SignUpMCRestException> handleResponse(Map<String, Object> response) {
+    private static Mono<SignInMCRestException> handleResponse(Map<String, Object> response) {
         logger.log(String.format("Response received on Web Client Error Handler: {}", response));
 
         List<String> errors = new ArrayList<>();
@@ -48,7 +48,7 @@ public class WebClientErrorHandler {
             code = Integer.parseInt(response.get("status").toString());
         }
 
-        return Mono.error(new SignUpMCRestException(message.toString(), code, errors, data));
+        return Mono.error(new SignInMCRestException(message.toString(), code, errors, data));
     }
 
 }

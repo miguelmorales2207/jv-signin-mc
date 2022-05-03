@@ -3,9 +3,9 @@ package co.com.dk.juanvaldez.jvsigninmc.exceptions;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class SignUpMCException extends Exception {
+public class SignInMCException extends Exception {
 
-    public SignUpMCException(String message) {
+    public SignInMCException(String message) {
         super(message);
     }
 }

@@ -2,12 +2,11 @@ package co.com.dk.juanvaldez.jvsigninmc.controllers;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import co.com.dk.juanvaldez.jvsigninmc.data.domain.Authenticate;
-import co.com.dk.juanvaldez.jvsigninmc.exceptions.BusinessRuleException;
+import co.com.dk.juanvaldez.jvsigninmc.data.domain.AuthenticateUser;
 import co.com.dk.juanvaldez.jvsigninmc.loggin.Loggin;
 import co.com.dk.juanvaldez.jvsigninmc.services.ForgotPasswordService;
 import co.com.dk.juanvaldez.jvsigninmc.services.SignInService;
-import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse.Authenticated;
+import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponse.UserAuthenticated;
 import co.com.dk.juanvaldez.jvsigninmc.vo.ApiResponseVO;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,16 +32,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/authenticate", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseVO<Authenticated>> LogIn(
-        @Valid @RequestBody Authenticate authenticateUser)
-        throws BusinessRuleException {
+    public ResponseEntity<ApiResponseVO<UserAuthenticated>> LogIn(
+        @Valid @RequestBody AuthenticateUser userAuthenticatedAuthenticateUser) {
 
-        logger.log("Start USER register process.");
-        Authenticated userAuthenticated = signInService.signIn(authenticateUser);
-        logger.log("USER registered successfully.");
+        logger.log("Start USER sign in process.");
+        UserAuthenticated userAuthenticated = signInService.signIn(userAuthenticatedAuthenticateUser);
+        logger.log("USER signed in successfully.");
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponseVO.<Authenticated>builder()
+            .body(ApiResponseVO.<UserAuthenticated>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("User has logged in successfully.")
                 .data(userAuthenticated)
@@ -51,12 +49,11 @@ public class UserController {
 
     @PostMapping(value = "/logout", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseVO<Object>> LogOut(
-        @RequestParam(value = "session_key", required = true) String sessionId)
-        throws BusinessRuleException {
+        @RequestParam(value = "session_key", required = true) String sessionId) {
 
-        logger.log("Start USER register process.");
+        logger.log("Start USER sign out process.");
         Object userLoggedOut = signInService.signOut(sessionId);
-        logger.log("USER registered successfully.");
+        logger.log("USER sign out successfully.");
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponseVO.<Object>builder()
